@@ -3,8 +3,9 @@ import time
 import pandas as pd
 import datetime
 import yfinance as yf
-# from tqdm import tqdm # removed for CI stability
 import sys
+
+print("[DEBUG] Loading main.py v1.2 ...")
 
 import config
 from data.market_data import fetch_data, get_latest_news
