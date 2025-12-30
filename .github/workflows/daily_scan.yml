@@ -1,0 +1,40 @@
+name: Daily IDX Swing Scan
+
+on:
+  schedule:
+    # 01:00 UTC = 08:00 WIB (Western Indonesian Time)
+    - cron: '0 1 * * 1-5' # Mon-Fri
+  workflow_dispatch:
+
+jobs:
+  run-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Create Secrets File
+      # We construct the secrets file from GitHub Secrets
+      run: |
+        mkdir secrets
+        echo '{"bot_token": "${{ secrets.TELEGRAM_BOT_TOKEN }}", "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}"}' > secrets/telegram_creds.json
+
+    - name: Create Credentials File
+      # We create the google credentials file from a GitHub Secret
+      run: |
+        echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > tradestock-bot-7269f6a7604c.json
+
+    - name: Run Scan configuration
+      # Ensure config uses the correct file name (it is hardcoded in the repo now)
+      run: python main.py --run-now

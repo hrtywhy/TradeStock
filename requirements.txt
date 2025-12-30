@@ -1,0 +1,8 @@
+pandas
+numpy
+yfinance
+ta
+schedule
+gspread
+google-auth
+requests

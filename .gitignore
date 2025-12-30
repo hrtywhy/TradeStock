@@ -1,0 +1,5 @@
+secrets/
+credentials.json
+__pycache__/
+*.pyc
+tradestock-bot-7269f6a7604c.json
