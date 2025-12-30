@@ -3,7 +3,7 @@ import time
 import pandas as pd
 import datetime
 import yfinance as yf
-from tqdm import tqdm # optional data processing progress
+# from tqdm import tqdm # removed for CI stability
 import sys
 
 import config
