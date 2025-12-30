@@ -21,7 +21,7 @@ def get_sector(symbol):
         return 'Unknown'
 
 def run_daily_scan():
-    print(f"\n[SCAN START] Running Daily Swing Scan at {datetime.datetime.now()}")
+    print(f"\n[SCAN START] Running Daily Swing Scan v1.1 at {datetime.datetime.now()}")
     
     results = []
     
