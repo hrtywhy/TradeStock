@@ -1,13 +1,13 @@
 # IDX Swing Trading System
 
-A fully automated swing trading watchlist and signal generator for the Indonesia Stock Exchange (IDX).
+A fully automated swing trading watchlist and signal generator for the specific Indonesia Stock Exchange (IDX) stocks.
 
 ## Features
 - **Daily Scan**: Runs automatically at 08:00 WIB.
 - **Strategy**: Trend Following + Pullback (RSI 45-55) + Volume Confirmation.
 - **Outputs**:
-  - Auto-updating [Google Sheet](https://docs.google.com/spreadsheets/d/1hElfiC3HV7T2hbh28xDPXd7wRkz8HmBgB28QLSZcQhs/edit).
-  - Telegram Alerts (Rich format with levels).
+  - Auto-updating to Google Sheet as a Daily Notes Stock Watchlist.
+  - Telegram Alerts.
 
 ## Setup Instructions
 
@@ -21,13 +21,13 @@ pip install -r requirements.txt
 1. Go to [Google Cloud Console](https://console.cloud.google.com/).
 2. Create a Project and enable **Google Sheets API** and **Google Drive API**.
 3. Create a **Service Account**, generate a JSON key, and download it.
-4. Rename the file to `credentials.json` and place it in this folder (`d:\Research\TradeStocks\`).
+4. Rename the file to `credentials.json`.
 5. Share your Google Sheet with the `client_email` found inside `credentials.json` (Give Editor access).
 
 ### 3. Telegram Bot Setup
 1. Chat with [@BotFather](https://t.me/BotFather) on Telegram.
 2. Create a new bot (`/newbot`) to get your **API Token**.
-3. Get your Chat ID (you can use `@userinfobot`).
+3. Get your Chat ID.
 4. Open `config.py` and update:
    ```python
    TELEGRAM_BOT_TOKEN = "YOUR_TOKEN"
