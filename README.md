@@ -1,6 +1,5 @@
 [![IDX Swing Trade Scan](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml/badge.svg)](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml)
 
-
 # IDX Swing Trading System
 
 A fully automated swing trading watchlist and signal generator for the specific Indonesia Stock Exchange (IDX) stocks.
