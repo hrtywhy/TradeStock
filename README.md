@@ -1,4 +1,6 @@
-[![Live Market Scan Loop](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml/badge.svg)](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml)
+<p align="center">
+  [![Live Market Scan Loop](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml/badge.svg)](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml)
+</p>
 
 # IDX Swing Trading System
 
@@ -42,7 +44,7 @@ pip install -r requirements.txt
 
 ### 2. Google Sheets API Setup
 1. Create a Project in [Google Cloud Console](https://console.cloud.google.com/) and enable **Google Sheets API**.
-2. Create a **Service Account**, generate a JSON key, and save it as `tradestock-bot-7269f6a7604c.json`.
+2. Create a **Service Account**, generate a JSON key, and save it as `credentials.json`.
 3. Share your target Google Sheet with the Service Account email.
 
 ### 3. Telegram Bot Setup
@@ -67,4 +69,4 @@ python main.py --run-now
 ## Configuration
 - **Universe**: Managed dynamically by `data/stock_universe.py`.
 - **Strategy Params**: adjustable in `config.py` (MA periods, RSI thresholds).
-- **Secrets**: stored in `secrets/` folder (git-ignored) or GitHub Secrets for production.
+
