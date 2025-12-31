@@ -1,14 +1,15 @@
-name: Daily IDX Swing Scan
-
+name: Live Market Scan Loop
 on:
   schedule:
-    # 01:00 UTC = 08:00 WIB (Western Indonesian Time)
-    - cron: '0 1 * * 1-5' # Mon-Fri
+    # 01:00 UTC (08:00 WIB) to 09:00 UTC (16:00 WIB)
+    # Trigger hourly to start a monitoring session
+    - cron: '0 1-9 * * 1-5' 
   workflow_dispatch:
 
 jobs:
-  run-scan:
+  run-market-monitor:
     runs-on: ubuntu-latest
+    timeout-minutes: 65 # Stop if it runs longer than an hour + buffer
     
     steps:
     - name: Checkout code
@@ -24,19 +25,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install tqdm
-        pip list
         
     - name: Create Secrets File
-      # We construct the secrets file from GitHub Secrets
       run: |
         mkdir secrets
         echo '{"bot_token": "${{ secrets.TELEGRAM_BOT_TOKEN }}", "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}"}' > secrets/telegram_creds.json
 
     - name: Create Credentials File
-      # We create the google credentials file from a GitHub Secret
       run: |
         echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > tradestock-bot-7269f6a7604c.json
 
-    - name: Run Scan configuration
-      # Ensure config uses the correct file name (it is hardcoded in the repo now)
-      run: python main.py --run-now
+    - name: Run Live Monitor (1 Hour Session)
+      # Run for 60 minutes. After 60 mins, it exits, and the next cron job picks up.
+      # This provides "continuous" 1-minute scanning coverage.
+      run: python main.py --duration 60
