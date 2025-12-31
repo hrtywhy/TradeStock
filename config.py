@@ -35,16 +35,26 @@ try:
         TELEGRAM_BOT_TOKEN = creds.get('bot_token')
         TELEGRAM_CHAT_ID = creds.get('chat_id')
         
+
     # Load Gemini Key
     with open(os.path.join(os.path.dirname(__file__), 'secrets', 'api_keys.json'), 'r') as f:
         api_creds = json.load(f)
         GENAI_API_KEY = api_creds.get('api_key')
+
+    # Load Google Sheet Config
+    with open(os.path.join(os.path.dirname(__file__), 'secrets', 'google_config.json'), 'r') as f:
+        g_creds = json.load(f)
+        GOOGLE_SHEET_ID = g_creds.get('sheet_id')
+        GOOGLE_SHEET_JSON_KEYFILE = g_creds.get('json_keyfile')
+        GOOGLE_SHEET_NAME = g_creds.get('sheet_name')
         
 except Exception as e:
     print(f"Error loading secrets: {e}")
     TELEGRAM_BOT_TOKEN = None
     TELEGRAM_CHAT_ID = None
     GENAI_API_KEY = None
+    GOOGLE_SHEET_ID = None
+    GOOGLE_SHEET_JSON_KEYFILE = None
 
 # Gemini AI API Key
 # Loaded from secrets now.
@@ -52,11 +62,9 @@ except Exception as e:
 # Telegram Configuration
 # Loaded from secrets/telegram_creds.json
 
+
 # Google Sheet Configuration
-GOOGLE_SHEET_JSON_KEYFILE = "tradestock-bot-7269f6a7604c.json" # Place your service account json in the root folder
-GOOGLE_SHEET_NAME = "Swing Trading Watchlist" # The name of the sheet file typically, but we used ID in the prompt. 
-# Better to use ID if possible, but gspread often uses name or open_by_url.
-GOOGLE_SHEET_ID = "1hElfiC3HV7T2hbh28xDPXd7wRkz8HmBgB28QLSZcQhs"
+# Loaded from secrets/google_config.json
 
 # Strategy Parameters
 MA_FAST = 20
