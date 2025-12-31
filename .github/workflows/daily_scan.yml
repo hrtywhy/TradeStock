@@ -1,9 +1,9 @@
 name: Live Market Scan Loop
 on:
   schedule:
-    # 01:00 UTC (08:00 WIB) to 09:00 UTC (16:00 WIB)
-    # Trigger hourly to start a monitoring session
-    - cron: '0 1-9 * * 1-5' 
+    # 01:00 UTC (08:00 WIB) to 08:00 UTC (15:00 WIB)
+    # The run at 08:00 UTC covers the 08:00-09:00 UTC (15:00-16:00 WIB) slot.
+    - cron: '0 1-8 * * 1-5' 
   workflow_dispatch:
 
 jobs:
