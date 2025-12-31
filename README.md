@@ -27,7 +27,7 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
 │   └── idx_universe_cache.json
 ├── indicators/
 │   ├── indicators.py       # TA Library (RSI, MA, ATR)
-│   └── sentiment.py        # AI News Analysis (via IDXNewsFetcher)
+│   └── sentiment.py        # AI News Analysis
 ├── strategy/
 │   ├── score_strategy.py   # Main Council Logic (Confluence)
 │   └── fundamental_analyst.py # Fundamental Filters
@@ -45,9 +45,11 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
     pip install -r requirements.txt
     ```
 2.  **Configuration**:
+
     *   **Secrets**:
         *   Create `secrets/api_keys.json`: `{"api_key": "YOUR_GEMINI_KEY"}`
         *   Create `secrets/telegram_creds.json`: `{"bot_token": "...", "chat_id": "..."}`
+        *   Create `secrets/google_config.json`: `{"sheet_id": "...", "json_keyfile": "...", "sheet_name": "..."}`
     *   **Google Sheet**: Place `tradestock-bot-....json` in root (GitIgnored).
     ```bash
     # Run a single immediate scan
