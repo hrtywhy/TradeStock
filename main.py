@@ -86,12 +86,10 @@ if __name__ == "__main__":
     # For this interactive enviroment, I will set it to run scheduler but also valid to run once.
     
     # Argument parser to run once?
+    # Argument parser to run once
     if len(sys.argv) > 1 and sys.argv[1] == "--run-now":
         run_daily_scan()
-    else:
-        # Check if we should run now for testing?
-        # Let's perform one run now to validate.
-        pass
+        sys.exit(0)
 
     while True:
         schedule.run_pending()
