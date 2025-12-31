@@ -1,6 +1,5 @@
-<p align="center">
 [![IDX Swing Trade Scan](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml/badge.svg)](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml)
-</p>
+
 
 # IDX Swing Trading System
 

@@ -2,13 +2,23 @@
 
 # List of stocks to scan (IDX)
 # Easy to modify/add new stocks here
-STOCK_UNIVERSE = [
-    "UNTR.JK", "ASII.JK", "BBNI.JK", "TLKM.JK", "PGAS.JK", 
-    "INCO.JK", "MDKA.JK", "HUMI.JK", "BRMS.JK", "ADRO.JK", 
-    "ADMR.JK", "NICL.JK", "RAJA.JK", "RATU.JK", "ENRG.JK", 
-    "DSSA.JK", "BBCA.JK", "BBRI.JK", "BMRI.JK", "GOTO.JK",
-    "AMMN.JK", "MEDC.JK", "PTBA.JK", "UNVR.JK", "ICBP.JK"
-]
+from data.stock_universe import fetch_idx_universe
+
+# List of stocks to scan (IDX)
+# Dynamically fetched from external source to cover all IPOs/Tickers
+try:
+    STOCK_UNIVERSE = fetch_idx_universe()
+    if not STOCK_UNIVERSE:
+        raise Exception("Empty universe returned")
+except Exception as e:
+    print(f"[CONFIG] Warning: Failed to fetch dynamic universe ({e}). Using fallback list.")
+    STOCK_UNIVERSE = [
+        "UNTR.JK", "ASII.JK", "BBNI.JK", "TLKM.JK", "PGAS.JK", 
+        "INCO.JK", "MDKA.JK", "HUMI.JK", "BRMS.JK", "ADRO.JK", 
+        "ADMR.JK", "NICL.JK", "RAJA.JK", "RATU.JK", "ENRG.JK", 
+        "DSSA.JK", "BBCA.JK", "BBRI.JK", "BMRI.JK", "GOTO.JK",
+        "AMMN.JK", "MEDC.JK", "PTBA.JK", "UNVR.JK", "ICBP.JK"
+    ]
 
 # Timeframe Settings
 TIMEFRAME = "1d"  # Daily
