@@ -27,20 +27,27 @@ HISTORY_PERIOD = "1y" # Fetch 1 year of data to ensure enough for MA50 and MA200
 import json
 import os
 
+
 # Load Secrets
 try:
     with open(os.path.join(os.path.dirname(__file__), 'secrets', 'telegram_creds.json'), 'r') as f:
         creds = json.load(f)
         TELEGRAM_BOT_TOKEN = creds.get('bot_token')
         TELEGRAM_CHAT_ID = creds.get('chat_id')
+        
+    # Load Gemini Key
+    with open(os.path.join(os.path.dirname(__file__), 'secrets', 'api_keys.json'), 'r') as f:
+        api_creds = json.load(f)
+        GENAI_API_KEY = api_creds.get('api_key')
+        
 except Exception as e:
     print(f"Error loading secrets: {e}")
     TELEGRAM_BOT_TOKEN = None
     TELEGRAM_CHAT_ID = None
+    GENAI_API_KEY = None
 
 # Gemini AI API Key
-# In production, use os.getenv("GENAI_API_KEY") or a secrets file.
-GENAI_API_KEY = "AIzaSyCzVL0y8c1egHaDbsadxm7iVwo7jRuUMIM"
+# Loaded from secrets now.
 
 # Telegram Configuration
 # Loaded from secrets/telegram_creds.json

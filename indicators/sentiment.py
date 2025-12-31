@@ -13,9 +13,15 @@ import config
 if config.GENAI_API_KEY:
     genai.configure(api_key=config.GENAI_API_KEY)
 
+
+from data.idx_news import IDXNewsFetcher
+
+# Init Fetcher
+idx_fetcher = IDXNewsFetcher()
+
 def get_market_sentiment(symbol):
     """
-    Fetches news for a symbol and uses Gemini to analyze sentiment.
+    Fetches news for a symbol (from IDX Official) and uses Gemini to analyze sentiment.
     Returns a score from -100 (Bearish) to +100 (Bullish).
     """
     if not config.GENAI_API_KEY:
@@ -23,30 +29,19 @@ def get_market_sentiment(symbol):
         return 0, "No API Key"
 
     try:
-        # 1. Fetch News via yfinance
-        # Note: yf news is often general. For IDX, we might get limited results.
-        # We append '.JK' for Yahoo Finance
-        ticker = yf.Ticker(symbol)
-        news_list = ticker.news
+        # 1. Fetch News from IDX (Official Sources)
+        headlines = idx_fetcher.get_stock_news(symbol, days=7)
         
-        if not news_list:
-            return 0, "No News Found"
-            
-        headlines = []
-        for item in news_list[:5]: # Analyze top 5 recent news
-            title = item.get('title', '')
-            link = item.get('link', '')
-            # Filter for recent news only (last 7 days) if possible
-            # But yfinance news doesn't always have easy date parsing, so we take latest.
-            headlines.append(f"- {title}")
+        # Fallback to yfinance if IDX returns nothing (rare but possible)
+        if not headlines:
+             ticker = yf.Ticker(symbol)
+             if ticker.news:
+                 headlines = [f"[Yahoo] {item.get('title')}" for item in ticker.news[:3]]
             
         if not headlines:
-            return 0, "No Headlines"
+            return 0, "No Headlines Found"
 
-
-
-
-        news_text = "\n".join(headlines)
+        news_text = "\n".join(headlines[:10]) # Limit input length
         
         # 2. Ask Gemini
         # Using the latest stable flash model

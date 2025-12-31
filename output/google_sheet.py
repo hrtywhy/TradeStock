@@ -49,22 +49,24 @@ def update_sheet(data_list):
         # Note: 'sector' might be missing if we didn't fetch it effectively. We'll handle that in main loop.
         
 
+
+        # Curated Columns (Reduced) based on user feedback "Too much data"
         display_columns = [
-            "date", "symbol", "score", "decision", "reasons", "close", "rsi", "trend_status",
-            "buy_area", "stop_loss", "target", "risk_pct", "reward_pct", "news_summary"
+            "date", "symbol", "decision", "reasons", "buy_area", "target", "news_summary"
         ]
         
+
         # Ensure all columns exist
         for col in display_columns:
             if col not in df.columns:
                 df[col] = "-"
         
-        df_final = df[display_columns]
+        # KEY FIX: Replace NaN/Inf with 0 or string to prevent JSON errors
+        df_final = df[display_columns].fillna(0).replace([float('inf'), float('-inf')], 0)
         
         # Rename for Sheet Headers
         headers = [
-            "Date", "Stock", "Score", "Decision", "Reasons", "Price", "RSI", "Trend",
-            "Buy Area", "Stop Loss", "Target", "Risk %", "Reward %", "AI/News"
+            "Date", "Stock", "Decision", "Analysis (Short)", "Buy Zone", "Target", "AI Sentiment"
         ]
         
         # Prepare list of lists

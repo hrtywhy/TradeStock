@@ -46,10 +46,17 @@ class ConfluenceStrategy:
         elif close > ma50:
             tech_score += 5
             analyst_notes["Technical"].append("Price > MA50")
+
         else:
             # STRICT FILTER: If Price < MA50, Ignore entirely.
             if not (rsi < 30): # Unless extremely oversold
-                 return {"valid": False, "score": 0, "decision": "BEARISH_SKIP", "symbol": symbol}
+                 return {
+                     "valid": False,
+                     "score": 0,
+                     "decision": "BEARISH_SKIP",
+                     "reasons": "Trend Bearish (< MA50)",
+                     "symbol": symbol
+                 }
 
         # RSI
         if 50 <= rsi <= 60:
@@ -79,16 +86,19 @@ class ConfluenceStrategy:
         # The User specified "Net Foreign Buy" is priority. 
         # Since we don't have real scraper, we use Volume Flow proxy AND Bandarmology structure.
         flow_score = 0
+        has_strong_flow = False
         
         # Proxy: If Price Up AND Volume Up significantly
         if close > df.iloc[-2]['Close'] and vol > (vol_ma * 1.5):
-            flow_score += 10
+            flow_score += 15
+            has_strong_flow = True
             analyst_notes["Flow"].append("Strong Inflow Est.")
             
         # Bandarmology Placeholder (If configured)
         b_score = self.bandarmology.get_broker_summary(symbol)
         if b_score and b_score > 1.0:
             flow_score += 10
+            has_strong_flow = True
             analyst_notes["Flow"].append("Broker Accumulation")
             
         score += flow_score
@@ -111,13 +121,14 @@ class ConfluenceStrategy:
 
         # --- Final Decision & Formatting ---
         # Threshold: Increased to 70 for Watchlist
+        # CRITICAL: STRONG BUY requires Strong Flow (Foreign Buy / Bandar)
         decision = "NO TRADE"
         valid = False
         
-        if score >= 80:
+        if score >= 85 and has_strong_flow:
             decision = "STRONG BUY"
             valid = True
-        elif score >= 60:
+        elif score >= 65:
             decision = "WATCHLIST"
             valid = True
             

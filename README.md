@@ -1,5 +1,5 @@
 
-# 📈 IDX Swing Trading System "Council of Analysts"
+# 📈 IDX Swing Trading System
 
 A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) that uses a **Multi-Analyst "Council" Strategy** to filter high-probability swing trading setups.
 
@@ -17,7 +17,7 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
 ## 📂 Project Structure
 
 ```
-d:\Research\TradeStocks\
+
 ├── config.py               # Configuration (Universe, Timeframe, API Keys)
 ├── main.py                 # Main entry point (Scan Loop)
 ├── data/
@@ -27,15 +27,16 @@ d:\Research\TradeStocks\
 │   └── idx_universe_cache.json
 ├── indicators/
 │   ├── indicators.py       # TA Library (RSI, MA, ATR)
-│   └── sentiment.py        # AI News Analysis (Gemini)
+│   └── sentiment.py        # AI News Analysis (via IDXNewsFetcher)
 ├── strategy/
 │   ├── score_strategy.py   # Main Council Logic (Confluence)
 │   └── fundamental_analyst.py # Fundamental Filters
 ├── output/
 │   ├── telegram_alert.py   # Bot Notifier
 │   └── google_sheet.py     # Dashboard Updater
-└── secrets/                # API Credentials (Likely .gitignored)
+
 ```
+
 
 ## 🛠️ Setup
 
@@ -44,9 +45,10 @@ d:\Research\TradeStocks\
     pip install -r requirements.txt
     ```
 2.  **Configuration**:
-    *   Set `GENAI_API_KEY` in `config.py` or Environment Variables.
-    *   Set Telegram Bot Token in `secrets/telegram_creds.json`.
-3.  **Run**:
+    *   **Secrets**:
+        *   Create `secrets/api_keys.json`: `{"api_key": "YOUR_GEMINI_KEY"}`
+        *   Create `secrets/telegram_creds.json`: `{"bot_token": "...", "chat_id": "..."}`
+    *   **Google Sheet**: Place `tradestock-bot-....json` in root (GitIgnored).
     ```bash
     # Run a single immediate scan
     python main.py --run-now
@@ -59,10 +61,11 @@ d:\Research\TradeStocks\
 
 | Analyst | Weight | Criteria |
 | :--- | :--- | :--- |
+
 | **Technical** | 40 pts | Bullish Trend (MA20>MA50), RSI 40-60, Vol > Avg |
 | **Fundamental** | 20 pts | Market Cap > 1T, ROE > 5% |
 | **Flow** | 20 pts | Price Up + Vol Spike (Smart Money Proxy) |
-| **AI Sentiment**| 20 pts | News is Positive/Neutral. Penalty for Bad News. |
+| **AI Sentiment**| 20 pts | **Deep Research**: Scans Official IDX Disclosures & News. Penalty for Bad News. |
 
 **Thresholds:**
 *   **WATCHLIST**: Score > 70
