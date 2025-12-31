@@ -38,6 +38,10 @@ except Exception as e:
     TELEGRAM_BOT_TOKEN = None
     TELEGRAM_CHAT_ID = None
 
+# Gemini AI API Key
+# In production, use os.getenv("GENAI_API_KEY") or a secrets file.
+GENAI_API_KEY = "AIzaSyCzVL0y8c1egHaDbsadxm7iVwo7jRuUMIM"
+
 # Telegram Configuration
 # Loaded from secrets/telegram_creds.json
 

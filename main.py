@@ -7,12 +7,16 @@ import sys
 
 print("[DEBUG] Loading main.py v1.2 ...")
 
+
 import config
 from data.market_data import fetch_data, get_latest_news
 from indicators.indicators import add_indicators
-from strategy.swing_filter import check_swing_setup
+from strategy.score_strategy import ConfluenceStrategy
 from output.google_sheet import update_sheet
 from output.telegram_alert import send_telegram_alert
+
+# Init Strategy
+strategy_engine = ConfluenceStrategy()
 
 def get_sector(symbol):
     try:
@@ -69,9 +73,9 @@ def run_scan(live_mode=True):
         # 3. Add Indicators
         df = add_indicators(df)
         
+
         # 4. Strategy Check
-        result = check_swing_setup(df)
-        result['symbol'] = symbol
+        result = strategy_engine.calculate_score(df, symbol)
         result['sector'] = "IDX Stock"
         
         results.append(result)
@@ -84,8 +88,8 @@ def run_scan(live_mode=True):
              if live_mode and alert_key in SENT_ALERTS:
                  continue
                  
-             print(f"!!! SIGNAL FOUND: {symbol} !!!")
-             result['news'] = get_latest_news(symbol)
+             print(f"!!! SIGNAL FOUND: {symbol} (Score: {result['score']}) !!!")
+             # News is already fetched inside calculate_score if needed
              send_telegram_alert(result)
              
              if live_mode:

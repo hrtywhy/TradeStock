@@ -48,9 +48,10 @@ def update_sheet(data_list):
         # Map our keys to headers
         # Note: 'sector' might be missing if we didn't fetch it effectively. We'll handle that in main loop.
         
+
         display_columns = [
-            "date", "symbol", "sector", "close", "ma20", "ma50", "rsi", "vol", "vol_ma",
-            "trend_status", "setup_status", "buy_area", "stop_loss", "target", "risk_pct", "reward_pct", "decision"
+            "date", "symbol", "score", "decision", "reasons", "close", "rsi", "trend_status",
+            "buy_area", "stop_loss", "target", "risk_pct", "reward_pct", "news_summary"
         ]
         
         # Ensure all columns exist
@@ -62,9 +63,8 @@ def update_sheet(data_list):
         
         # Rename for Sheet Headers
         headers = [
-            "Date", "Stock Code", "Sector", "Last Price", "MA20", "MA50", "RSI", 
-            "Volume Today", "Avg Volume 20D", "Trend Status", "Setup Status", 
-            "Buy Area", "Stop Loss", "Target", "Risk (%)", "Reward (%)", "Decision"
+            "Date", "Stock", "Score", "Decision", "Reasons", "Price", "RSI", "Trend",
+            "Buy Area", "Stop Loss", "Target", "Risk %", "Reward %", "AI/News"
         ]
         
         # Prepare list of lists

@@ -1,71 +1,72 @@
-  [![Live Market Scan Loop](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml/badge.svg)](https://github.com/hrtywhy/TradeStock/actions/workflows/daily_scan.yml)
 
+# 📈 IDX Swing Trading System "Council of Analysts"
 
-# IDX Swing Trading System
+A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) that uses a **Multi-Analyst "Council" Strategy** to filter high-probability swing trading setups.
 
-A fully automated, real-time swing trading signal generator for the Indonesia Stock Exchange (IDX). This system monitors the market continuously during trading hours, identifying high-momentum swing setups and delivering instant alerts.
+## 🚀 Features
 
-## Features
+*   **Council of Analysts Strategy**:
+    *   **🔧 Technical Analyst**: Validates Trend (MA20/50), RSI Pullbacks, and Volume.
+    *   **📊 Fundamental Analyst**: Filters by Market Cap (>1T), ROE (>5%), and PE Ratio (<15).
+    *   **🌊 Flow Analyst**: Detects "Bandar" accumulation via Volume Spikes (Proxy) or Broker Summary (Plugin ready).
+    *   **🤖 Sentiment Analyst**: Uses **Google Gemini AI** to scan news and reject trades with negative sentiment (Bankruptcy, Corruption).
+*   **Confluence Scoring**: Setups are scored (0-100). Only scores > 70 are actionable.
+*   **Automated Alerts**: Sends beautiful Telegram alerts with Trade Plans and AI summaries.
+*   **Dashboard**: Auto-updates a Google Sheet with scan results.
 
-- **Live Market Monitoring**: 
-  - Runs continuously from **08:00 to 16:00 WIB** (Western Indonesia Time).
-  - Scans the market every minute to catch moves as they happen.
-  - Automatically pauses during market close/weekends.
+## 📂 Project Structure
 
-- **Dynamic Stock Universe**: 
-  - Automatically fetches the entire list of IDX stocks (900+ tickers) via API.
-  - No manual updating of stock lists required; automatically captures new IPOs.
-
-- **Swing Strategy**: 
-  - **Trend Filter**: Price above MA20 and MA50.
-  - **Momentum**: RSI between 45 and 55 (Pullback zone) with recent crossover.
-  - **Volume**: Volume breakout or consistent liquidity check.
-  - **Sector Context**: (In Progress) Adds sector mapping for verification.
-
-- **Real-Time Outputs**:
-  - **Telegram Alerts**: Instant notification when a valid setup is confirmed. Smart filtering prevents duplicate alerts for the same stock in a single day.
-  - **Google Sheet Dashboard**: Updates a centralized sheet with scan results for comprehensive review.
-
-## Architecture
-
-The system is designed to run 24/7 on **GitHub Actions** (Serverless):
-- **Cron Jobs**: Triggers hourly sessions during market days.
-- **Relay Loop**: Each session runs for 60 minutes, ensuring continuous coverage without server costs.
-- **Timezone Aware**: Strictly operates on WIB (UTC+7) regardless of server location.
-
-## Setup Instructions
-
-### 1. Python Environment
-Install the required libraries:
-```bash
-pip install -r requirements.txt
+```
+d:\Research\TradeStocks\
+├── config.py               # Configuration (Universe, Timeframe, API Keys)
+├── main.py                 # Main entry point (Scan Loop)
+├── data/
+│   ├── market_data.py      # OHLCV Fetcher (yfinance)
+│   ├── bandarmology.py     # Flow Analysis / Broker Summary
+│   ├── stock_universe.py   # Dynamic Stock List
+│   └── idx_universe_cache.json
+├── indicators/
+│   ├── indicators.py       # TA Library (RSI, MA, ATR)
+│   └── sentiment.py        # AI News Analysis (Gemini)
+├── strategy/
+│   ├── score_strategy.py   # Main Council Logic (Confluence)
+│   └── fundamental_analyst.py # Fundamental Filters
+├── output/
+│   ├── telegram_alert.py   # Bot Notifier
+│   └── google_sheet.py     # Dashboard Updater
+└── secrets/                # API Credentials (Likely .gitignored)
 ```
 
-### 2. Google Sheets API Setup
-1. Create a Project in [Google Cloud Console](https://console.cloud.google.com/) and enable **Google Sheets API**.
-2. Create a **Service Account**, generate a JSON key, and save it as `credentials.json`.
-3. Share your target Google Sheet with the Service Account email.
+## 🛠️ Setup
 
-### 3. Telegram Bot Setup
-1. Create a new bot via [@BotFather](https://t.me/BotFather) to get your **API Token**.
-2. Get your Chat ID.
-3. Securely configure `config.py` or use environment variables for deployment.
+1.  **Dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2.  **Configuration**:
+    *   Set `GENAI_API_KEY` in `config.py` or Environment Variables.
+    *   Set Telegram Bot Token in `secrets/telegram_creds.json`.
+3.  **Run**:
+    ```bash
+    # Run a single immediate scan
+    python main.py --run-now
 
-## Usage
+    # Run Live Monitor (08:00-16:00 WIB)
+    python main.py --live
+    ```
 
-### Run Live Monitor (Local)
-To start the bot in live mode (auto-sleeps when market is closed):
-```bash
-python main.py
-```
+## 🧠 Strategy Logic (The Council)
 
-### Run Single Scan
-To process the entire market once and exit:
-```bash
-python main.py --run-now
-```
+| Analyst | Weight | Criteria |
+| :--- | :--- | :--- |
+| **Technical** | 40 pts | Bullish Trend (MA20>MA50), RSI 40-60, Vol > Avg |
+| **Fundamental** | 20 pts | Market Cap > 1T, ROE > 5% |
+| **Flow** | 20 pts | Price Up + Vol Spike (Smart Money Proxy) |
+| **AI Sentiment**| 20 pts | News is Positive/Neutral. Penalty for Bad News. |
 
-## Configuration
-- **Universe**: Managed dynamically by `data/stock_universe.py`.
-- **Strategy Params**: adjustable in `config.py` (MA periods, RSI thresholds).
+**Thresholds:**
+*   **WATCHLIST**: Score > 70
+*   **STRONG BUY**: Score > 80
 
+## ⚠️ Disclaimer
+Trading stocks involves risk. This tool provides analysis, not financial advice. "Do your best, let God do the rest."

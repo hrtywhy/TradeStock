@@ -28,37 +28,38 @@ def send_telegram_alert(signal_data):
     company_name = get_company_name(signal_data['symbol'])
     current_time = datetime.now().strftime("%Y-%m-%d %I:%M %p")
     
+
+
+
+
     # Construct Message
-    # EXACT STRUCTURE from requirements
-    message = f"""📈 SWING SETUP DETECTED (IDX)
+    message = f"""🔥POTENTIAL TICKER DETECTED🔥
 
-Stock  	: ${signal_data['symbol'].replace('.JK', '')} ({company_name})
-Status	: Breakout/Pullback Setup
-Action	: BUY ON IMPLIED MOMENTUM
-Trend  	: {signal_data['trend_status']}
-RSI    	: {signal_data['rsi']:.1f} (Pullback Zone)
-Vol    	: Above Avg 20D
+Stock   : ${signal_data['symbol'].replace('.JK', '')} ({company_name})
+Score   : {signal_data['score']}/100 
+Decision: {signal_data['decision']}
+Status : {signal_data['reasons']}
 
-📌 BUY AREA : {signal_data['buy_area']}
+📌 Details:
+• Trend  : {signal_data['trend_status']}
+• RSI    : {signal_data['rsi']:.1f}
+• Volume : {signal_data['vol']:,.0f} (Avg: {signal_data['vol_ma']:,.0f})
 
-🛑 STOP LOSS : {signal_data['stop_loss']}
+🎯 Plan  : 
+• Buy    : {signal_data['buy_area']}
+• Stop   : {signal_data['stop_loss']}
+• Target : {signal_data['target']}
+• Risk   : {signal_data['risk_pct']}%  
+• Reward : {signal_data['reward_pct']}%
 
-🎯 TARGET : {signal_data['target']}
-• Risk: {signal_data['risk_pct']}% 
-• Reward: {signal_data['reward_pct']}%
+🤖 Sentiment Analysis:
+{signal_data.get('news_summary', 'No News Found')}
 
-🎯 KEY CATALYST :
-{signal_data.get('news', 'No recent news found.')}
+⚠️ Risk Note
+Always manage risk. 
+Do your best let god do the rest
 
-⚠️ NOTES :
-Pullback within uptrend, volume confirmation present.
-Strictly check bid/offer before entry.
-
-⚠️ RISK NOTE: 
-Always manage risk. Volatility is expected.
-
-⏰ TIME :
-{current_time}
+⏰ {current_time}
 """
 
     url = f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage"
