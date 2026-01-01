@@ -40,6 +40,11 @@ try:
     with open(os.path.join(os.path.dirname(__file__), 'secrets', 'api_keys.json'), 'r') as f:
         api_creds = json.load(f)
         GENAI_API_KEY = api_creds.get('api_key')
+        FINNHUB_API_KEY = api_creds.get('finnhub_api_key')
+        POLYGON_API_KEY = api_creds.get('polygon_api_key')
+        MARKETAUX_API_KEY = api_creds.get('marketaux_api_key')
+        NEWSAPI_KEY = api_creds.get('newsapi_key')
+        NEWSDATA_KEY = api_creds.get('newsdata_key')
 
     # Load Google Sheet Config
     with open(os.path.join(os.path.dirname(__file__), 'secrets', 'google_config.json'), 'r') as f:
@@ -55,6 +60,11 @@ except Exception as e:
     GENAI_API_KEY = None
     GOOGLE_SHEET_ID = None
     GOOGLE_SHEET_JSON_KEYFILE = None
+    FINNHUB_API_KEY = None
+    POLYGON_API_KEY = None
+    MARKETAUX_API_KEY = None
+    NEWSAPI_KEY = None
+    NEWSDATA_KEY = None
 
 # Gemini AI API Key
 # Loaded from secrets now.

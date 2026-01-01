@@ -28,7 +28,7 @@ class ConfluenceStrategy:
             "Flow": []
         }
 
-        # --- 1. Technical Analyst (Max 40 pts) ---
+        # --- 1. Technical Analyst (Max 30 pts) ---
         # PRIMARY FILTER: If Trend is Bearish, we STOP immediately (unless oversold bounce strategy, but user wants restrict).
         
         tech_score = 0
@@ -41,7 +41,7 @@ class ConfluenceStrategy:
         
         # Trend
         if ma20 > ma50:
-            tech_score += 15
+            tech_score += 10
             analyst_notes["Technical"].append("Bullish Trend")
         elif close > ma50:
             tech_score += 5
@@ -60,10 +60,10 @@ class ConfluenceStrategy:
 
         # RSI
         if 50 <= rsi <= 60:
-            tech_score += 15
+            tech_score += 10
             analyst_notes["Technical"].append("Strong Momentum Zone")
         elif 40 <= rsi <= 50:
-            tech_score += 10
+            tech_score += 5
             analyst_notes["Technical"].append("Pullback Zone")
             
         # Volume
@@ -77,46 +77,69 @@ class ConfluenceStrategy:
         if score < 20:
              return {"valid": False, "score": score, "decision": "WEAK_TECH", "symbol": symbol}
 
-        # --- 2. Fundamental Analyst (Max 20 pts) ---
+        # --- 2. Fundamental Analyst (Max 15 pts) ---
         fund_score, fund_reasons = self.fundamentals.analyze(symbol)
         analyst_notes["Fundamental"] = fund_reasons
         score += fund_score
 
-        # --- 3. Flow Analyst (Net Foreign/Bandar) (Max 20 pts) ---
+        # --- 3. Flow Analyst (Net Foreign/Bandar) (Max 35 pts) ---
         # The User specified "Net Foreign Buy" is priority. 
         # Since we don't have real scraper, we use Volume Flow proxy AND Bandarmology structure.
         flow_score = 0
         has_strong_flow = False
         
-        # Proxy: If Price Up AND Volume Up significantly
+        # Proxy: If Price Up AND Volume Up significantly (Smart Money Proxy)
         if close > df.iloc[-2]['Close'] and vol > (vol_ma * 1.5):
-            flow_score += 15
-            has_strong_flow = True
-            analyst_notes["Flow"].append("Strong Inflow Est.")
-            
-        # Bandarmology Placeholder (If configured)
-        b_score = self.bandarmology.get_broker_summary(symbol)
-        if b_score and b_score > 1.0:
             flow_score += 10
             has_strong_flow = True
-            analyst_notes["Flow"].append("Broker Accumulation")
+            analyst_notes["Flow"].append("Smart Money Proxy (Vol Spike)")
             
+        # --- NEW: Bandarmology Filter Engine (Hard Filter) ---
+        # "Broker Summary – Big Accumulation Above 500M with Positive Money Flow and Clean Money Above 100M"
+        flow_data = self.bandarmology.calculate_flow_proxies(df)
+        
+        if not flow_data or not flow_data['passed_filters']:
+             # If strict filter is enabled (implied by user request to "reduce stocks")
+             # We return invalid.
+             reasons_str = "; ".join(flow_data['reasons']) if flow_data else "No Flow Data"
+             return {
+                 "valid": False, 
+                 "score": 0, 
+                 "decision": "WEAK_FLOW", 
+                 "reasons": f"Flow Filter Failed: {reasons_str}",
+                 "symbol": symbol
+             }
+        
+        # If passed, gives strong points
+        flow_score += 15
+        has_strong_flow = True
+        
+        # Check for Massive Foreign/Smart Money Flow (> 5B)
+        if flow_data['accumulation_value'] >= 5_000_000_000:
+             analyst_notes["Flow"].append("Major Foreign Buy (>5B)")
+             flow_score += 10 # Bonus for massive flow
+        else:
+             analyst_notes["Flow"].append(f"Big Accum (>500M)")
+             
+        analyst_notes["Flow"].append(f"Circulation {flow_data['circulation_value']/1_000_000:.0f}M")
+
         score += flow_score
 
         # --- 4. Sentiment/News Analyst (Max 20 pts) ---
         # Only fetch if we are looking good (Score > 50 so far)
         if score >= 50:
             ai_score, ai_reason = get_market_sentiment(symbol)
+            
+            sentiment_label = "Neutral News"
             if ai_score > 20:
                 score += 20
-                analyst_notes["Sentiment"].append("Positive News")
+                sentiment_label = "Positive News based on AI"
             elif ai_score < -20:
                 score -= 20 # PENALTY
-                analyst_notes["Sentiment"].append("Negative News")
-            else:
-                 analyst_notes["Sentiment"].append("Neutral News")
+                sentiment_label = "Negative News based on AI"
             
-            analyst_notes["Sentiment"].append(f"AI: {ai_reason}")
+            analyst_notes["Sentiment"].append(sentiment_label)
+            analyst_notes["Sentiment"].append(ai_reason) # This is the (+)/(-) block
 
 
         # --- Final Decision & Formatting ---
@@ -158,5 +181,5 @@ class ConfluenceStrategy:
             "target": int(close * 1.05),
             "risk_pct": 5.0,
             "reward_pct": 5.0,
-            "news_summary": "; ".join(analyst_notes["Sentiment"])
+            "news_summary": "\n".join(analyst_notes["Sentiment"])
         }

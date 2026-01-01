@@ -1,4 +1,4 @@
-name: Live Market Scan Loop
+name: Market Live Scanner
 on:
   schedule:
     # 01:00 UTC (08:00 WIB) to 08:00 UTC (15:00 WIB)
@@ -28,8 +28,10 @@ jobs:
         
     - name: Create Secrets File
       run: |
-        mkdir secrets
+        mkdir -p secrets
         echo '{"bot_token": "${{ secrets.TELEGRAM_BOT_TOKEN }}", "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}"}' > secrets/telegram_creds.json
+        echo '${{ secrets.API_KEYS_JSON }}' > secrets/api_keys.json
+        echo '${{ secrets.GOOGLE_CONFIG_JSON }}' > secrets/google_config.json
 
     - name: Create Credentials File
       run: |

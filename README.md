@@ -47,10 +47,14 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
 2.  **Configuration**:
 
     *   **Secrets**:
-        *   Create `secrets/api_keys.json`: `{"api_key": "YOUR_GEMINI_KEY"}`
-        *   Create `secrets/telegram_creds.json`: `{"bot_token": "...", "chat_id": "..."}`
-        *   Create `secrets/google_config.json`: `{"sheet_id": "...", "json_keyfile": "...", "sheet_name": "..."}`
-    *   **Google Sheet**: Place `tradestock-bot-....json` in root (GitIgnored).
+        *  Create a `secrets/` folder (GitIgnored).
+        *  Add `api_keys.json` containing keys for:
+            * Gemini AI
+            * Finnhub, Polygon, MarketAux, NewsAPI, NewsData (Optional)
+        *  Add `telegram_creds.json` for Bot Token.
+        *  Add `google_config.json` for Sheets.
+    *   **Google Sheet**: Place your service account JSON in the `secrets/` folder.
+    
     ```bash
     # Run a single immediate scan
     python main.py --run-now
@@ -59,19 +63,18 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
     python main.py --live
     ```
 
-## 🧠 Strategy Logic (The Council)
+## 🧠 Strategy Logic ("Fusion Strategy")
 
 | Analyst | Weight | Criteria |
 | :--- | :--- | :--- |
-
-| **Technical** | 40 pts | Bullish Trend (MA20>MA50), RSI 40-60, Vol > Avg |
-| **Fundamental** | 20 pts | Market Cap > 1T, ROE > 5% |
-| **Flow** | 20 pts | Price Up + Vol Spike (Smart Money Proxy) |
-| **AI Sentiment**| 20 pts | **Deep Research**: Scans Official IDX Disclosures & News. Penalty for Bad News. |
+| **Bandarmology (Flow)** | **35 pts** | **Primary Driver**. Big Accum (>500M), Smart Money (Vol Spike), Foreign Buy (>5B). |
+| **Technical** | **30 pts** | Bullish Trend (MA20>MA50), RSI Momentum, Volume Breakouts. |
+| **Sentiment (AI)**| **20 pts** | **News Sources**: IDX, Finnhub, Polygon, MarketAux, NewsAPI, NewsData. <br> **AI**: Gemini analyzes headlines (+/- 20 pts). |
+| **Fundamental** | **15 pts** | Market Cap (Blue Chip/Mid), ROE, PE Ratio. |
 
 **Thresholds:**
-*   **WATCHLIST**: Score > 70
-*   **STRONG BUY**: Score > 80
+*   **WATCHLIST**: Score > 65
+*   **STRONG BUY**: Score > 85 (+ Strong Flow)
 
 ## ⚠️ Disclaimer
 Trading stocks involves risk. This tool provides analysis, not financial advice. "Do your best, let God do the rest."

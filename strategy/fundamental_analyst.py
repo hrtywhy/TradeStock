@@ -31,10 +31,10 @@ class FundamentalAnalyst:
             if mcap is None: mcap = 0
             
             if mcap > 10_000_000_000_000: # > 10T (Blue Chip)
-                score += 10
+                score += 7
                 reasons.append("Blue Chip")
             elif mcap > 1_000_000_000_000: # > 1T (Mid Cap)
-                score += 5
+                score += 4
                 reasons.append("Mid Cap")
             else:
                 reasons.append("Micro Cap (High Risk)")
@@ -43,7 +43,7 @@ class FundamentalAnalyst:
             roe = info.get('returnOnEquity', 0)
             if roe is None: roe = 0
             if roe > 0.15: # > 15%
-                score += 5
+                score += 4
                 reasons.append("High ROE")
             elif roe > 0.05:
                 score += 2
@@ -54,13 +54,13 @@ class FundamentalAnalyst:
             if pe is None: pe = 0
             
             if 0 < pe < 15:
-                score += 5
+                score += 4
                 reasons.append("Undervalued (PE<15)")
             elif 0 < pe < 30:
                 score += 2
                 reasons.append("Fair Value")
             elif pe > 50:
-                score -= 5
+                score -= 5 # Penalty remains
                 reasons.append("Overvalued")
 
             result = (score, reasons)
