@@ -131,5 +131,10 @@ def get_market_sentiment(symbol):
         return score, explanation
 
     except Exception as e:
-        print(f"[ERROR] Sentiment Analysis Failed: {e}")
-        return 0, str(e)
+        error_msg = str(e)
+        print(f"[ERROR] Sentiment Analysis Failed: {error_msg}")
+        
+        if "429" in error_msg or "Quota" in error_msg or "quota" in error_msg:
+             return 0, "Sentiment Check Skipped (API Quota Limit)"
+        
+        return 0, "Sentiment Check Skipped (Error Fetching News)"
