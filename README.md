@@ -1,14 +1,14 @@
 
 # 📈 IDX Swing Trading System
 
-A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) that uses a **Multi-Analyst "Council" Strategy** to filter high-probability swing trading setups.
+A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) that uses a Bandarmology Fusion Strategy and Sentiment Analysis to filter high-probability swing trading setups.
 
 ## 🚀 Features
 
-*   **Council of Analysts Strategy**:
+*   **Bandarmology Fusion Strategy**:
     *   **🔧 Technical Analyst**: Validates Trend (MA20/50), RSI Pullbacks, and Volume.
     *   **📊 Fundamental Analyst**: Filters by Market Cap (>1T), ROE (>5%), and PE Ratio (<15).
-    *   **🌊 Flow Analyst**: Detects "Bandar" accumulation via Volume Spikes (Proxy) or Broker Summary (Plugin ready).
+    *   **🌊 Analyst Catcher**: Detects "Bandar" accumulation via Volume Spikes (Proxy) or Broker Summary (Plugin ready).
     *   **🤖 Sentiment Analyst**: Uses **Google Gemini AI** to scan news and reject trades with negative sentiment (Bankruptcy, Corruption).
 *   **Confluence Scoring**: Setups are scored (0-100). Only scores > 70 are actionable.
 *   **Automated Alerts**: Sends beautiful Telegram alerts with Trade Plans and AI summaries.
@@ -50,7 +50,7 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
         *  Create a `secrets/` folder (GitIgnored).
         *  Add `api_keys.json` containing keys for:
             * Gemini AI
-            * Finnhub, Polygon, MarketAux, NewsAPI, NewsData (Optional)
+            * Finnhub, Polygon, MarketAux, NewsAPI, NewsData
         *  Add `telegram_creds.json` for Bot Token.
         *  Add `google_config.json` for Sheets.
     *   **Google Sheet**: Place your service account JSON in the `secrets/` folder.
@@ -63,7 +63,7 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
     python main.py --live
     ```
 
-## 🧠 Strategy Logic ("Fusion Strategy")
+## 🧠 Strategy Logic with Bandarmology
 
 | Analyst | Weight | Criteria |
 | :--- | :--- | :--- |
