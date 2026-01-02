@@ -27,15 +27,24 @@ jobs:
         pip install tqdm
         
     - name: Create Secrets File
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        API_KEYS_JSON: ${{ secrets.API_KEYS_JSON }}
+        GOOGLE_CONFIG_JSON: ${{ secrets.GOOGLE_CONFIG_JSON }}
       run: |
         mkdir -p secrets
-        echo '{"bot_token": "${{ secrets.TELEGRAM_BOT_TOKEN }}", "chat_id": "${{ secrets.TELEGRAM_CHAT_ID }}"}' > secrets/telegram_creds.json
-        echo '${{ secrets.API_KEYS_JSON }}' > secrets/api_keys.json
-        echo '${{ secrets.GOOGLE_CONFIG_JSON }}' > secrets/google_config.json
+        # Construct telegram_creds manually
+        echo "{\"bot_token\": \"$TELEGRAM_BOT_TOKEN\", \"chat_id\": \"$TELEGRAM_CHAT_ID\"}" > secrets/telegram_creds.json
+        # Dump full JSON secrets safely
+        echo "$API_KEYS_JSON" > secrets/api_keys.json
+        echo "$GOOGLE_CONFIG_JSON" > secrets/google_config.json
 
     - name: Create Credentials File
+      env:
+        GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
       run: |
-        echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > tradestock-bot-7269f6a7604c.json
+        echo "$GOOGLE_CREDENTIALS_JSON" > tradestock-bot-7269f6a7604c.json
 
     - name: Run Live Monitor (1 Hour Session)
       # Run for 60 minutes. After 60 mins, it exits, and the next cron job picks up.
