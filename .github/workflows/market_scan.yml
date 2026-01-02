@@ -28,10 +28,10 @@ jobs:
         
     - name: Create Secrets File
       env:
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        API_KEYS_JSON: ${{ secrets.API_KEYS_JSON }}
-        GOOGLE_CONFIG_JSON: ${{ secrets.GOOGLE_CONFIG_JSON }}
+        TELEGRAM_BOT_TOKEN: '${{ secrets.TELEGRAM_BOT_TOKEN }}'
+        TELEGRAM_CHAT_ID: '${{ secrets.TELEGRAM_CHAT_ID }}'
+        API_KEYS_JSON: '${{ secrets.API_KEYS_JSON }}'
+        GOOGLE_CONFIG_JSON: '${{ secrets.GOOGLE_CONFIG_JSON }}'
       run: |
         mkdir -p secrets
         # Construct telegram_creds manually
@@ -42,7 +42,7 @@ jobs:
 
     - name: Create Credentials File
       env:
-        GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+        GOOGLE_CREDENTIALS_JSON: '${{ secrets.GOOGLE_CREDENTIALS_JSON }}'
       run: |
         echo "$GOOGLE_CREDENTIALS_JSON" > tradestock-bot-7269f6a7604c.json
 
