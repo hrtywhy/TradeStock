@@ -6,10 +6,10 @@ A sophisticated automated trading system for the Indonesia Stock Exchange (IDX) 
 ## 🚀 Features
 
 *   **Bandarmology Fusion Strategy**:
-    *   **🔧 Technical Analyst**: Validates Trend (MA20/50), RSI Pullbacks, and Volume.
-    *   **📊 Fundamental Analyst**: Filters by Market Cap (>1T), ROE (>5%), and PE Ratio (<15).
-    *   **🌊 Analyst Catcher**: Detects "Bandar" accumulation via Volume Spikes (Proxy) or Broker Summary (Plugin ready).
-    *   **🤖 Sentiment Analyst**: Uses **Google Gemini AI** to scan news and reject trades with negative sentiment (Bankruptcy, Corruption).
+    *   **Technical Analyst**: Validates Trend (MA20/50), RSI Pullbacks, and Volume.
+    *   **Fundamental Analyst**: Filters by Market Cap (>1T), ROE (>5%), and PE Ratio (<15).
+    *   **Analyst Catcher**: Detects "Bandar" accumulation via Volume Spikes (Proxy) or Broker Summary.
+    *   **Sentiment Analyst**: Uses **Google Gemini AI** to scan news and reject trades with negative sentiment (Bankruptcy, Corruption).
 *   **Confluence Scoring**: Setups are scored (0-100). Only scores > 70 are actionable.
 *   **Automated Alerts**: Sends beautiful Telegram alerts with Trade Plans and AI summaries.
 *   **Dashboard**: Auto-updates a Google Sheet with scan results.
