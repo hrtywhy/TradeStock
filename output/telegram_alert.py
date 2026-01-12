@@ -65,11 +65,7 @@ Do your best let god do the rest
     url = f"https://api.telegram.org/bot{config.TELEGRAM_BOT_TOKEN}/sendMessage"
     payload = {
         "chat_id": config.TELEGRAM_CHAT_ID,
-        "text": message,
-        "parse_mode": "HTML" # Or Markdown, but plain text is safer if symbols are weird. Sticking to plain text implicitly or HTML? 
-        # The sample had bolding. Let's try to add no parse_mode first to be safe, or just standard text.
-        # Actually user prompt used some bolding logic in visual representation, but raw text in python string.
-        # I will send as plain text to ensure delivery, or minimal markdown.
+        "text": message
     }
     
     try:

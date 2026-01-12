@@ -65,9 +65,11 @@ def run_scan(live_mode=True):
     
     # 1. Iterate Universe
     for symbol in config.STOCK_UNIVERSE:
+        time.sleep(1) # Prevent rate limiting
         # 2. Fetch Data
         df = fetch_data(symbol, period=config.HISTORY_PERIOD, interval=config.TIMEFRAME)
         if df is None:
+            print(f"[SKIP] No data for {symbol}")
             continue
             
         # 3. Add Indicators

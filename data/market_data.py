@@ -16,26 +16,39 @@ def fetch_data(symbol, period="1y", interval="1d"):
                       Returns None if data is invalid or empty.
     """
     try:
-        # yfinance download
-        # auto_adjust=True to handle dividends/splits roughly equivalent to adjusted close
-        df = yf.download(symbol, period=period, interval=interval, progress=False, auto_adjust=False)
+        # Use Ticker.history which is often more reliable for single requests
+        ticker = yf.Ticker(symbol)
+        df = ticker.history(period=period, interval=interval, auto_adjust=False)
         
+        if df.empty:
+            # Fallback: sometimes history returns empty if auto_adjust is False for some reason, try default
+            df = ticker.history(period=period, interval=interval)
+            
         if df.empty:
             print(f"Warning: No data found for {symbol}")
             return None
             
-        # Ensure MultiIndex columns are handled if yfinance returns them (common in recent versions)
+        # Ensure MultiIndex columns are handled
         if isinstance(df.columns, pd.MultiIndex):
             df.columns = df.columns.get_level_values(0)
             
-        # Required columns check
+        # Standardize columns
+        df.reset_index(inplace=True) # Ensure Date is a column if it's in index
+        
+        # Determine Date column (sometimes 'Date' or 'Datetime')
+        date_col = 'Date' if 'Date' in df.columns else 'Datetime'
+        
         required_cols = ['Open', 'High', 'Low', 'Close', 'Volume']
+        
+        # Check if we have what we need
         if not all(col in df.columns for col in required_cols):
-             # Try mapping commonly found alternative names if necessary, 
-             # but yfinance standardizes to Title Case usually.
              print(f"Warning: Missing columns for {symbol}. Found: {df.columns}")
              return None
              
+        # Set index back to Date for strategy compatibility
+        if date_col in df.columns:
+            df.set_index(date_col, inplace=True)
+            
         df = df[required_cols]
         df.dropna(inplace=True)
         
