@@ -79,12 +79,12 @@ def get_market_sentiment(symbol):
         
         # 2. Ask Gemini
         # Using the latest stable flash model
-        model_name = 'gemini-flash-latest'
+        model_name = 'gemini-1.5-flash'
         try:
              model = genai.GenerativeModel(model_name)
         except:
              # Fallback
-             model = genai.GenerativeModel('gemini-pro')
+             model = genai.GenerativeModel('gemini-1.5-pro')
              
         prompt = f"""
         Analyze the sentiment of the following news headlines for the stock '{symbol}'.

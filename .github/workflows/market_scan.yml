@@ -1,9 +1,9 @@
 name: Market Live Scanner
 on:
-  schedule:
+  # schedule:
     # 01:00 UTC (08:00 WIB) to 08:00 UTC (15:00 WIB)
     # The run at 08:00 UTC covers the 08:00-09:00 UTC (15:00-16:00 WIB) slot.
-    - cron: '0 1-8 * * 1-5' 
+    # - cron: '0 1-8 * * 1-5' 
   workflow_dispatch:
 
 jobs:

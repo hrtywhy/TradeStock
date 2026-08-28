@@ -1,0 +1,18 @@
+[Unit]
+Description=IDX Swing Trading Bot
+After=network.target
+
+[Service]
+Type=simple
+User=tradebot
+Group=tradebot
+WorkingDirectory=/opt/tradestock-bot
+# Force Python to unbuffer stdout/stderr so logs appear in journalctl immediately
+Environment=PYTHONUNBUFFERED=1
+# Run the bot in infinite live mode
+ExecStart=/opt/tradestock-bot/.venv/bin/python /opt/tradestock-bot/main.py --live
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

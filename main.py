@@ -1,9 +1,11 @@
+import sys
+# Force unbuffered output for systemd logging
+sys.stdout.reconfigure(line_buffering=True)
 
 import time
 import pandas as pd
 import datetime
 import yfinance as yf
-import sys
 
 print("[DEBUG] Loading main.py v1.2 ...")
 
