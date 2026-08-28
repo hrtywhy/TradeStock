@@ -11,7 +11,7 @@ set -e  # Exit on any error
 REPO_URL="https://github.com/hrtywhy/TradeStock.git"
 APP_DIR="/opt/tradestock-bot"
 SERVICE_USER="tradebot"
-PYTHON_BIN="python3.11"
+PYTHON_BIN="python3"
 # --------------------------------------------------------------
 
 echo ""
@@ -23,7 +23,7 @@ echo ""
 # 1. Update system & install dependencies
 echo "[1/8] Updating system packages..."
 apt-get update -qq
-apt-get install -y -qq python3.11 python3.11-venv python3-pip git curl
+apt-get install -y -qq python3 python3-venv python3-pip git curl
 echo "      Done."
 
 # 2. Create a dedicated system user (no login shell, for security)
