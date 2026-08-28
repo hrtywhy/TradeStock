@@ -8,7 +8,7 @@
 set -e  # Exit on any error
 
 # -- CONFIG ----------------------------------------------------
-REPO_URL="https://github.com/YOUR_USERNAME/TradeStocks.git"  # ? Change this!
+REPO_URL="https://github.com/hrtywhy/TradeStock.git"
 APP_DIR="/opt/tradestock-bot"
 SERVICE_USER="tradebot"
 PYTHON_BIN="python3.11"
